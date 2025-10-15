@@ -12,9 +12,9 @@ import PickupsPage from "./pages/PickupsPage";
 import ContactUsPage from "./pages/ContactUsPage";
 import AdminPage from "./pages/AdminPage";
 import { useRemoveNonExistingCartItems } from "./hooks/useRemoveNonExistingCartItems";
+import MigrationPage from "./pages/MigrationPage";
 
 function App() {
-
   useRemoveNonExistingCartItems();
   return (
     <Box
@@ -37,6 +37,7 @@ function App() {
             <Route path="/pickups" element={<PickupsPage />} />
             <Route path="/contact" element={<ContactUsPage />} />
             <Route path="/admin" element={<AdminPage />} />
+            <Route path="/migration" element={<MigrationPage />} />
           </Routes>
         </Box>
         <Footer />
