@@ -34,14 +34,16 @@ def allowed_admins():
         allowed_admin.append(email)
     return allowed_admin
 
+
 def normalize_df(df):
     df.replace([np.inf, -np.inf], np.nan, inplace=True)
     df.fillna(0, inplace=True)
     df = df.round(2)
 
+
 def export_orders():
     orders = read_firestore_collection("orders")
-    products = read_firestore_collection("products")    
+    products = read_firestore_collection("products")
     products_df = pd.DataFrame(products)
     products_df["short_description"] = products_df.apply(product_short_description, axis=1)
 
@@ -91,7 +93,7 @@ def export_orders():
 
             product_from_products = products_df[products_df["id"] == id].iloc[0]
             short_description = product_short_description(product_from_products)
-            
+
             packaging_entry = {
                 "שם פרטי": order_first_name,
                 "שם משפחה": order_last_name,
@@ -115,35 +117,42 @@ def export_orders():
         .reset_index()
     )
     orders_groupby_pickup_df["עמלה"] = orders_groupby_pickup_df["מחיר לאחר הנחה"] * 0.10
-    
-    orders_count = (
-        orders_df.groupby("נקודת חלוקה").size().reset_index(name="מספר הזמנות")
-    )
-    
-    orders_groupby_pickup_df = pd.merge(
-        orders_groupby_pickup_df, orders_count, on="נקודת חלוקה"
-    )
+
+    orders_count = orders_df.groupby("נקודת חלוקה").size().reset_index(name="מספר הזמנות")
+
+    orders_groupby_pickup_df = pd.merge(orders_groupby_pickup_df, orders_count, on="נקודת חלוקה")
     orders_groupby_pickup_df["למי לשלם"] = ""
 
-    suppliers_df = (
-        packaging_df.groupby(["ספק", "המוצר"]).agg({"כמות": "sum"}).reset_index()
+    suppliers_df = packaging_df.groupby(["ספק", "המוצר"]).agg({"כמות": "sum"}).reset_index()
+
+    suppliers_with_products_df = pd.merge(
+        suppliers_df, products_df, how="left", left_on=["המוצר", "ספק"], right_on=["short_description", "supplier"]
     )
 
-    suppliers_with_products_df = pd.merge(suppliers_df, products_df, how="left", left_on=["המוצר", "ספק"], right_on=["short_description", "supplier"])
-
-    suppliers_df = suppliers_with_products_df[["ספק", "המוצר", "כמות", "stock_liron", "stock_sharale", "units_in_package", "price"]]
-    suppliers_df = suppliers_df.rename(columns={"stock_liron": "מלאי לירון", "stock_sharale": "מלאי שהרלה", "units_in_package": "יחידות באריזה", "price": "מחיר ליחידה"})
-    suppliers_df["מלאי לירון"] = pd.to_numeric(suppliers_df["מלאי לירון"], errors='coerce').fillna(0).astype(int)
-    suppliers_df["מלאי שהרלה"] = pd.to_numeric(suppliers_df["מלאי שהרלה"], errors='coerce').fillna(0).astype(int)
-    suppliers_df["יחידות באריזה"] = pd.to_numeric(suppliers_df["יחידות באריזה"], errors='coerce').fillna(0).astype(int)
-    suppliers_df["מחיר ליחידה"] = pd.to_numeric(suppliers_df["מחיר ליחידה"], errors='coerce').fillna(0).astype(int)
+    suppliers_df = suppliers_with_products_df[
+        ["ספק", "המוצר", "כמות", "stock_liron", "stock_sharale", "units_in_package", "price", "purchase_price"]
+    ]
+    suppliers_df = suppliers_df.rename(
+        columns={
+            "stock_liron": "מלאי לירון",
+            "stock_sharale": "מלאי שהרלה",
+            "units_in_package": "יחידות באריזה",
+            "price": "מחיר ליחידה",
+            "purchase_price": "מחיר רכישה",
+        }
+    )
+    suppliers_df["מלאי לירון"] = pd.to_numeric(suppliers_df["מלאי לירון"], errors="coerce").fillna(0).astype(int)
+    suppliers_df["מלאי שהרלה"] = pd.to_numeric(suppliers_df["מלאי שהרלה"], errors="coerce").fillna(0).astype(int)
+    suppliers_df["יחידות באריזה"] = pd.to_numeric(suppliers_df["יחידות באריזה"], errors="coerce").fillna(0).astype(int)
+    suppliers_df["מחיר ליחידה"] = pd.to_numeric(suppliers_df["מחיר ליחידה"], errors="coerce").fillna(0).astype(int)
+    suppliers_df["מחיר רכישה"] = pd.to_numeric(suppliers_df["מחיר רכישה"], errors="coerce").fillna(0).astype(float)
 
     suppliers_df["מלאי כולל"] = suppliers_df["מלאי לירון"] + suppliers_df["מלאי שהרלה"]
     suppliers_df["כמה יחידות להזמין"] = (suppliers_df["כמות"] - suppliers_df["מלאי כולל"]).clip(lower=0)
-    suppliers_df["כמה אריזות להזמין"] = np.ceil(suppliers_df["כמה יחידות להזמין"] / suppliers_df["יחידות באריזה"]) 
+    suppliers_df["כמה אריזות להזמין"] = np.ceil(suppliers_df["כמה יחידות להזמין"] / suppliers_df["יחידות באריזה"])
     suppliers_df["כמות להזמנה"] = suppliers_df["כמה אריזות להזמין"] * suppliers_df["יחידות באריזה"]
     suppliers_df["ספייר"] = suppliers_df["מלאי כולל"] + suppliers_df["כמות להזמנה"] - suppliers_df["כמות"]
-    suppliers_df["עלות"] = suppliers_df["כמות להזמנה"] * suppliers_df["מחיר ליחידה"]
+    suppliers_df["עלות"] = suppliers_df["כמות להזמנה"] * suppliers_df["מחיר רכישה"]
     normalize_df(suppliers_df)
 
     current_sale_name = current_sale()
@@ -151,38 +160,40 @@ def export_orders():
     suppliers_total_cost = suppliers_df["עלות"].sum()
     orders_revenue_before_discounts = orders_df["מחיר לפני הנחה"].sum()
     orders_revenue_after_discounts = orders_df["מחיר לאחר הנחה"].sum()
-    orders_groupby_pickup_df_without_revava_and_yakir = orders_groupby_pickup_df[~orders_groupby_pickup_df["נקודת חלוקה"].str.contains('רבבה|יקיר', na=False)]
+    orders_groupby_pickup_df_without_revava_and_yakir = orders_groupby_pickup_df[
+        ~orders_groupby_pickup_df["נקודת חלוקה"].str.contains("רבבה|יקיר", na=False)
+    ]
     comissions_without_revava_and_yakir = orders_groupby_pickup_df_without_revava_and_yakir["עמלה"].sum()
     expected_comissions_cost = comissions_without_revava_and_yakir / 2
     net_profit_before_tax = orders_revenue_after_discounts - suppliers_total_cost - expected_comissions_cost
 
-    general_df = pd.DataFrame(columns=['key', 'value'])
-    general_df.loc[0] = ['מכירה נוכחית', current_sale_name]
-    general_df.loc[1] = ['כמות הזמנות', num_of_orders]
-    general_df.loc[2] = ['עלות ספקים', suppliers_total_cost]
-    general_df.loc[3] = ['סכום הזמנות', orders_revenue_before_discounts]
-    general_df.loc[4] = ['סכום הזמנות לאחר הנחה', orders_revenue_after_discounts]
-    general_df.loc[5] = ['סכום עמלות ללא רבבה ויקיר', comissions_without_revava_and_yakir]
-    general_df.loc[6] = ['עלות עמלות', expected_comissions_cost]
-    general_df.loc[7] = ['רווח', net_profit_before_tax]
+    general_df = pd.DataFrame(columns=["key", "value"])
+    general_df.loc[0] = ["מכירה נוכחית", current_sale_name]
+    general_df.loc[1] = ["כמות הזמנות", num_of_orders]
+    general_df.loc[2] = ["עלות ספקים", suppliers_total_cost]
+    general_df.loc[3] = ["סכום הזמנות", orders_revenue_before_discounts]
+    general_df.loc[4] = ["סכום הזמנות לאחר הנחה", orders_revenue_after_discounts]
+    general_df.loc[5] = ["סכום עמלות ללא רבבה ויקיר", comissions_without_revava_and_yakir]
+    general_df.loc[6] = ["עלות עמלות", expected_comissions_cost]
+    general_df.loc[7] = ["רווח", net_profit_before_tax]
 
     general_df = general_df.rename(columns={"key": "נתון", "value": "ערך"})
     normalize_df(general_df)
-    
+
     sheet_title = "shomron-tights" + "@" + datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     gmail_accounts = allowed_admins()
 
     # Dictionary of tab names and DataFrames
     tabs_data = {
         "הזמנות": orders_df.sort_values(by=["נקודת חלוקה", "שם משפחה", "שם פרטי"], ascending=[True, True, True]),
-        "אריזות": packaging_df.sort_values(by=["נקודת חלוקה", "שם משפחה", "שם פרטי", "המוצר"], ascending=[True, True, True, True]),
+        "אריזות": packaging_df.sort_values(
+            by=["נקודת חלוקה", "שם משפחה", "שם פרטי", "המוצר"], ascending=[True, True, True, True]
+        ),
         "מכירות לפי ישוב": orders_groupby_pickup_df.sort_values(by=["נקודת חלוקה"], ascending=[True]),
         "ספקים": suppliers_df.sort_values(by=["ספק", "המוצר"], ascending=[True, True]),
-        "כללי": general_df
+        "כללי": general_df,
     }
 
     # Create the Google Sheet and set permissions
-    spreadsheet = create_google_sheet_with_permissions(
-        sheet_title, gmail_accounts, tabs_data
-    )
+    spreadsheet = create_google_sheet_with_permissions(sheet_title, gmail_accounts, tabs_data)
     return spreadsheet.url
