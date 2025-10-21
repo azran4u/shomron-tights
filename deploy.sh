@@ -43,6 +43,7 @@ fi
 if [ "$SERVICE_NAME" == "admin" ]; then
   echo "Deploying backend service admin"  
   cd functions/admin
+  nvm use v18.19.1
   python3.11 -m venv venv
   source venv/bin/activate
   pip install -r requirements.txt
