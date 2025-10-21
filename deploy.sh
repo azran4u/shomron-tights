@@ -27,7 +27,7 @@ function build-react-app() {
 
 function firebase-cli-node() {
   echo "Deploying to Firebase"
-  nvm use v18.19.1
+  nvm use 20
 }
 
 # if the service name is "frontend", deploy the frontend service
