@@ -1,3 +1,4 @@
+import io
 import os
 from PIL import Image
 
@@ -19,3 +20,15 @@ def downscale_images(input_path, output_path, mobile_size=(720, 1280)):
                         mobile_output_dir, f"mobile_{file}"
                     )
                     img_mobile.save(mobile_output_path, optimize=True, quality=85)
+
+
+def downscale_image(input_path, mobile_size=(720, 1280)):
+    with Image.open(input_path) as img:
+        img_mobile = img.copy()
+        if img_mobile.mode != "RGB":
+            img_mobile = img_mobile.convert("RGB")
+        img_mobile.thumbnail(mobile_size, Image.Resampling.LANCZOS)
+        buffer = io.BytesIO()
+        img_mobile.save(buffer, format="JPEG", optimize=True, quality=85)
+        buffer.seek(0)
+        return buffer

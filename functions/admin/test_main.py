@@ -1,11 +1,11 @@
 # test_main.py
 
-# from sync import sync
+from sync import sync
 
-# sync()
+sync()
 
-from export_orders import export_orders
-export_orders()
+# from export_orders import export_orders
+# export_orders()
 
 # from upload_images import upload_images
 

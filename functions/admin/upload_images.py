@@ -1,9 +1,12 @@
+import os
+
 from utils.cloud_storage_utils import (
     create_gcs_bucket,
     delete_gcs_bucket,
+    upload_bytes_to_cloud_storage,
     upload_folder_content_to_cloud_storage,
 )
-from utils.image_utils import downscale_images
+from utils.image_utils import downscale_image, downscale_images
 from utils.filesystem_utils import delete_local_folder_and_content
 
 
@@ -16,3 +19,11 @@ def upload_images():
     delete_gcs_bucket(bucket_name)
     create_gcs_bucket(bucket_name)
     upload_folder_content_to_cloud_storage(bucket_name, images_path_output)
+
+
+def upload_single_image():
+    local_path = os.path.join(os.path.dirname(__file__), "image.jpeg")
+    blob_name = "תחרה צמות/mobile_שמנת.jpg"
+    bucket_name = "shomron-tights-images"
+    data = downscale_image(local_path)
+    upload_bytes_to_cloud_storage(bucket_name, data, blob_name)
