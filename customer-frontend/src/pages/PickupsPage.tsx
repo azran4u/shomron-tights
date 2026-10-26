@@ -1,5 +1,5 @@
 import Typography from "@mui/material/Typography";
-import { Box, Card, CardContent, useTheme } from "@mui/material";
+import { Box, Card, CardContent } from "@mui/material";
 import { usePickups } from "../hooks/usePickups";
 import { useMobile } from "../hooks/useMobile";
 import { useMemo } from "react";
@@ -11,20 +11,22 @@ const PickupsPage = () => {
   const { pickups } = usePickups();
   const isMobile = useMobile();
   const cardWidth = useMemo(() => (isMobile ? "90vw" : "50vw"), [isMobile]);
-  const theme = useTheme();
 
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        alignItems: "center",
+        px: 2,
+        pt: 3,
+        pb: 4,
       }}
     >
-      <Typography variant="h4" gutterBottom sx={{ margin: "0 auto" }}>
+      <Typography variant="h4" gutterBottom>
         {title}
       </Typography>
-      <Typography variant="subtitle1" gutterBottom sx={{ margin: "0 auto" }}>
+      <Typography variant="body1" color="text.secondary" gutterBottom>
         {subtitle}
       </Typography>
       <Typography
@@ -38,9 +40,8 @@ const PickupsPage = () => {
           display: "flex",
           flexDirection: "column",
           gap: "1rem",
-          margin: "1rem auto 0 auto",
+          margin: "1.5rem auto 0 auto",
           width: cardWidth,
-          backgroundColor: theme.palette.background.paper,
         }}
       >
         {pickups &&

@@ -29,7 +29,7 @@ const CartWithBadge: React.FC = () => {
       <IconButton color="inherit" sx={{ padding: 0 }}>
         <Badge
           badgeContent={itemsCount}
-          color="info"
+          color="primary"
           overlap="rectangular"
           anchorOrigin={{
             vertical: "top",

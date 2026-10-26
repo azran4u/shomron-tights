@@ -190,13 +190,19 @@ const TightsProductPage: React.FC = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        gap: "0.5rem",
+        gap: "0.75rem",
+        px: 2,
+        pb: 2,
       }}
     >
       <Title
         title={initialProductAndAmount.product?.display_name ?? "Product"}
       />
-      <Typography variant="body1" sx={{ textAlign: "center" }}>
+      <Typography
+        variant="body1"
+        color="text.secondary"
+        sx={{ textAlign: "center", maxWidth: 520 }}
+      >
         {initialProductAndAmount.product.description}
       </Typography>
       <form onSubmit={handleSubmit}>
@@ -205,8 +211,16 @@ const TightsProductPage: React.FC = () => {
           flexDirection="column"
           alignItems="center"
           justifyContent="center"
-          maxWidth="250px"
+          width="min(420px, 92vw)"
           margin="auto"
+          sx={{
+            bgcolor: "background.paper",
+            border: "1px solid",
+            borderColor: "divider",
+            borderRadius: 3,
+            px: 3,
+            py: 3,
+          }}
         >
           <FirebaseStorageImage url={selectedProduct?.image ?? ""} />
           <SelectComponent
@@ -284,7 +298,7 @@ const TightsProductPage: React.FC = () => {
             variant="contained"
             color="primary"
             disabled={isSubmitting}
-            sx={{ margin: "1rem 0" }}
+            sx={{ margin: "1.25rem 0 0.25rem", width: "100%" }}
           >
             הוסף לסל
           </Button>

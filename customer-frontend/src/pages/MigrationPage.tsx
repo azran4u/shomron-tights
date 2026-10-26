@@ -54,6 +54,8 @@ const MigrationPage = () => {
         justifyContent: "center",
         alignItems: "center",
         gap: "1rem",
+        pt: 3,
+        px: 2,
       }}
     >
       <Typography variant="h4" gutterBottom>

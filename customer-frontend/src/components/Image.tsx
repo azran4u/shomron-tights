@@ -21,7 +21,12 @@ const Image: React.FC<Props> = ({ url, size }) => {
           src={url}
           alt="Image"
           loading="lazy"
-          height={sizeRem}
+          sx={{
+            height: sizeRem,
+            width: "auto",
+            maxWidth: "100%",
+            objectFit: "contain",
+          }}
         />
       ) : (
         <Box>

@@ -168,7 +168,7 @@ const CheckoutPage: React.FC = () => {
     },
   });
 
-  const maxWidth = isMobile ? "80vw" : "400px";
+  const formWidth = isMobile ? "92vw" : "440px";
   return saleIsLoading ? (
     <Box
       sx={{
@@ -188,14 +188,20 @@ const CheckoutPage: React.FC = () => {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        maxWidth: { maxWidth },
-        margin: "auto",
+        width: formWidth,
+        margin: "1.5rem auto 2rem",
+        px: { xs: 2, sm: 4 },
+        py: 3,
         gap: "0.5rem",
+        bgcolor: "background.paper",
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 3,
       }}
     >
-      {isExistingOrder && <Typography style={{display: "flex", justifyContent: "center"}} color="error" variant="h6">שימי לב שאת עורכת הזמנה קיימת</Typography>}
+      {isExistingOrder && <Typography style={{display: "flex", justifyContent: "center", textAlign: "center"}} color="error" variant="h6">שימי לב שאת עורכת הזמנה קיימת</Typography>}
       <Title title={"טופס הזמנה"} />
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{ width: "100%" }}>
         {status && (
           <Typography
             variant="body2"
@@ -289,7 +295,7 @@ const CheckoutPage: React.FC = () => {
           variant="contained"
           color={isExistingOrder ? "error": "primary"}
           disabled={isSubmitting}
-          sx={{ margin: "1rem auto", display: "flex" }}
+          sx={{ margin: "1.25rem auto 0.25rem", display: "flex", minWidth: 200 }}
         >
           {isExistingOrder ? "עדכון הזמנה קיימת" : "בצע/י הזמנה"}
         </Button>

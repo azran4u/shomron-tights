@@ -15,6 +15,7 @@ const Logo: React.FC<LogoProps> = ({ height = "3rem" }) => {
       sx={{
         height,
         width: "auto",
+        cursor: "pointer",
       }}
       onClick={() => navigate("/")}
     />

@@ -10,6 +10,7 @@ import { enableMapSet } from "immer";
 import { CacheProvider } from "@emotion/react";
 import { cacheRtl, theme } from "./theme";
 import { PersistGate } from "redux-persist/integration/react";
+import "./index.css";
 
 enableMapSet();
 const queryClient = new QueryClient();

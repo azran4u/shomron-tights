@@ -32,8 +32,8 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
       <InputLabel
         id={`${name}-label`}
         sx={{
-          fontSize: "1rem",
-          fontWeight: "bold",
+          fontSize: "0.95rem",
+          fontWeight: 600,
         }}
       >
         {label}
@@ -46,7 +46,7 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         onChange={onChange}
         label={label}
         error={error}
-        sx={{ textAlign: "center", paddingRight: "2rem" }}
+        sx={{ textAlign: "center", bgcolor: "#fff" }}
         MenuProps={{
           PaperProps: {
             sx: {

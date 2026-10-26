@@ -21,12 +21,13 @@ function App() {
       sx={{
         display: "flex",
         flexDirection: "column",
-        height: "100vh",
+        minHeight: "100vh",
+        bgcolor: "background.default",
       }}
     >
       <Router>
         <Sidebar />
-        <Box sx={{ flex: 1, marginTop: "4rem" }}>
+        <Box component="main" sx={{ flex: 1, width: "100%", pt: "4.75rem", pb: 6 }}>
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="/product/:kind/:name" element={<ProductPage />} />

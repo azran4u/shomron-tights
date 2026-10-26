@@ -14,14 +14,36 @@ const CountSelector: React.FC<CountSelectorProps> = ({
   onDecrement,
 }) => {
   return (
-    <Box display="flex" alignItems="center" justifyContent="center">
-      <Button variant="outlined" onClick={onDecrement} disabled={value <= 1}>
+    <Box
+      display="flex"
+      alignItems="center"
+      justifyContent="center"
+      sx={{
+        border: "1px solid",
+        borderColor: "divider",
+        borderRadius: 999,
+        bgcolor: "#fff",
+      }}
+    >
+      <Button
+        variant="text"
+        onClick={onDecrement}
+        disabled={value <= 1}
+        sx={{ minWidth: 44, borderRadius: 999 }}
+      >
         -
       </Button>
-      <Typography variant="body1" mx={2}>
+      <Typography
+        variant="body1"
+        sx={{ minWidth: 28, textAlign: "center", fontWeight: 600 }}
+      >
         {value}
       </Typography>
-      <Button variant="outlined" onClick={onIncrement}>
+      <Button
+        variant="text"
+        onClick={onIncrement}
+        sx={{ minWidth: 44, borderRadius: 999 }}
+      >
         +
       </Button>
     </Box>

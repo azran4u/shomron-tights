@@ -23,7 +23,9 @@ def upload_images():
 
 def upload_single_image():
     local_path = os.path.join(os.path.dirname(__file__), "image.jpeg")
-    blob_name = "תחרה צמות/mobile_שמנת.jpg"
+    folder_name = "ילדות 20"
+    hebrew_color = "שחור"
+    blob_name = f"{folder_name}/mobile_{hebrew_color}.jpg"
     bucket_name = "shomron-tights-images"
     data = downscale_image(local_path)
     upload_bytes_to_cloud_storage(bucket_name, data, blob_name)

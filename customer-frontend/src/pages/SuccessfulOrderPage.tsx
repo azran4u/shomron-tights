@@ -34,6 +34,16 @@ const SuccessfulOrderPage = () => {
           flexDirection: "column",
           justifyContent: "center",
           textAlign: "center",
+          width: "min(640px, calc(100% - 2rem))",
+          mx: "auto",
+          mt: 2,
+          px: { xs: 2.5, sm: 4 },
+          py: 4,
+          bgcolor: "background.paper",
+          border: "1px solid",
+          borderColor: "divider",
+          borderRadius: 3,
+          gap: 0.5,
         }}
       >
         <Typography variant="h4" gutterBottom>
@@ -69,7 +79,7 @@ const SuccessfulOrderPage = () => {
           navigate(endpoint ?? "");
         }}
         variant="contained"
-        sx={{ display: "flex", margin: "1rem auto" }}
+        sx={{ display: "flex", margin: "1.5rem auto", minWidth: 200 }}
       >
         לצפייה בהזמנה
       </Button>

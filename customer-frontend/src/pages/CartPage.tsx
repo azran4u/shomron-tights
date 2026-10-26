@@ -123,28 +123,32 @@ const CartPage: React.FC = () => {
 
   return (
     <>
-    {isExistingOrder && <Typography style={{display: "flex", justifyContent: "center"}} color="error" variant="h6">שימי לב שאת עורכת הזמנה קיימת</Typography>}
+    {isExistingOrder && (
+      <Typography
+        sx={{ display: "flex", justifyContent: "center", textAlign: "center", px: 2, pt: 2 }}
+        color="error"
+        variant="h6"
+      >
+        שימי לב שאת עורכת הזמנה קיימת
+      </Typography>
+    )}
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr 2fr 1fr",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          px: 2,
+          pt: 1,
         }}
       >
+        <Title title="עגלת קניות" />
         <Button
           disabled={!sale}
-          variant="contained"
+          variant="outlined"
           onClick={() => setShowCreateNewOrderModal(true)}
-          sx={{
-            width: "1rem",
-            height: "2.5rem",
-            display: "flex",
-            marginLeft: "1rem",
-            marginTop: "1rem",
-          }}
         >
           הזמנה חדשה
         </Button>
-        <Title title="עגלת קניות" />
       </Box>
       <Dialog
         open={showCreateNewOrderModal}
@@ -176,6 +180,7 @@ const CartPage: React.FC = () => {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            py: 4,
           }}
         >
           <Typography variant="h6">העגלה ריקה</Typography>
@@ -201,7 +206,18 @@ const CartPage: React.FC = () => {
               </>
             )}
           </Box>
-          <TableContainer component={Paper}>
+          <TableContainer
+            component={Paper}
+            sx={{
+              width: "min(960px, calc(100% - 2rem))",
+              mx: "auto",
+              mt: 2,
+              border: "1px solid",
+              borderColor: "divider",
+              boxShadow: "none",
+              overflowX: "auto",
+            }}
+          >
             <Table aria-label="simple table">
               <TableHead>
                 <TableRow>
@@ -232,15 +248,12 @@ const CartPage: React.FC = () => {
                   <TableCell align="center">
                     {order?.date && (
                       <Button
-                        variant="contained"
+                        variant="outlined"
                         color="error"
                         onClick={() => {
                           setShowDeleteOrderModal(true);
                         }}
-                        sx={{
-                          width: "1rem",
-                          height: "2.5rem",
-                        }}
+                        sx={{ whiteSpace: "nowrap" }}
                       >
                         מחיקת הזמנה
                       </Button>
@@ -294,6 +307,7 @@ const CartPage: React.FC = () => {
                           },
                         })
                       }
+                      sx={{ cursor: "pointer" }}
                     >
                       <Typography variant="body2">{product.name} </Typography>
                       {product.kind === "tights" && (
@@ -355,11 +369,16 @@ const CartPage: React.FC = () => {
                     <TableCell align="center">
                       <Box
                         sx={{
-                          display: "flex",
+                          display: "inline-flex",
                           flexDirection: "row",
-                          gap: "0.5rem",
+                          gap: "0.35rem",
                           justifyContent: "center",
                           alignItems: "center",
+                          border: "1px solid",
+                          borderColor: "divider",
+                          borderRadius: 999,
+                          px: 1,
+                          py: 0.25,
                         }}
                       >
                         <AddIcon
@@ -383,6 +402,7 @@ const CartPage: React.FC = () => {
                     <TableCell align="center">
                       <DeleteIcon
                         onClick={() => handleRemoveItem(product.id)}
+                        sx={{ cursor: "pointer", color: "text.secondary" }}
                       />
                     </TableCell>
                   </TableRow>
@@ -426,6 +446,7 @@ const CartPage: React.FC = () => {
               variant="contained"
               onClick={() => navigate("/checkout")}
               color={isExistingOrder ? "error": "primary"}
+              sx={{ minWidth: 220 }}
             >
               {isExistingOrder ? "עדכון הזמנה קיימת" : "בצע/י הזמנה"}
             </Button>

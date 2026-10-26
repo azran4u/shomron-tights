@@ -16,14 +16,14 @@ const ProductPage: React.FC = () => {
   const backButtonText = "חזרה לקטלוג המוצרים";
 
   return (
-    <Box>
+    <Box sx={{ px: { xs: 1, md: 2 } }}>
       {kind && products.length > 0 && (
         <>
           <Button
-            variant="contained"
+            variant="text"
             size="small"
             sx={{
-              margin: "1rem 1rem",
+              margin: "0.25rem 0.5rem 0",
             }}
             onClick={() => {
               navigate("/");
