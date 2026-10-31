@@ -60,8 +60,19 @@ const SelectComponent: React.FC<SelectComponentProps> = ({
         }}
       >
         {options.map((option) => (
-          <MenuItem value={option} key={option}>
-            {option}
+          <MenuItem
+            value={option}
+            key={option}
+            translate={name === "size" ? "no" : undefined}
+            className={name === "size" ? "notranslate" : undefined}
+          >
+            {name === "size" ? (
+              <span translate="no" className="notranslate">
+                {option}
+              </span>
+            ) : (
+              option
+            )}
           </MenuItem>
         ))}
       </Select>

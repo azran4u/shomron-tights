@@ -319,7 +319,10 @@ const CartPage: React.FC = () => {
                             רגל: {product.leg}
                           </Typography>
                           <Typography variant="body2">
-                            מידה: {product.size}
+                            מידה:{" "}
+                            <span translate="no" className="notranslate">
+                              {product.size}
+                            </span>
                           </Typography>
                           <Typography variant="body2">
                             צבע: {product.color}
@@ -332,7 +335,10 @@ const CartPage: React.FC = () => {
                             תחרה: {product.lace}
                           </Typography>
                           <Typography variant="body2">
-                            מידה: {product.size}
+                            מידה:{" "}
+                            <span translate="no" className="notranslate">
+                              {product.size}
+                            </span>
                           </Typography>
                           <Typography variant="body2">
                             צבע: {product.color}
@@ -345,7 +351,10 @@ const CartPage: React.FC = () => {
                             אורך: {product.length}
                           </Typography>
                           <Typography variant="body2">
-                            מידה: {product.size}
+                            מידה:{" "}
+                            <span translate="no" className="notranslate">
+                              {product.size}
+                            </span>
                           </Typography>
                           <Typography variant="body2">
                             צבע: {product.color}
@@ -358,7 +367,10 @@ const CartPage: React.FC = () => {
                             רגל: {product.leg}
                           </Typography>
                           <Typography variant="body2">
-                            מידה: {product.size}
+                            מידה:{" "}
+                            <span translate="no" className="notranslate">
+                              {product.size}
+                            </span>
                           </Typography>
                           <Typography variant="body2">
                             צבע: {product.color}

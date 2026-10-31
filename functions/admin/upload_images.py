@@ -22,10 +22,10 @@ def upload_images():
 
 
 def upload_single_image():
-    local_path = os.path.join(os.path.dirname(__file__), "image.jpeg")
-    folder_name = "ילדות 20"
-    hebrew_color = "שחור"
+    local_path = os.path.join(os.path.dirname(__file__), "image.jpg")
+    folder_name = "תחרה צמות"
+    hebrew_color = "שמנת"
     blob_name = f"{folder_name}/mobile_{hebrew_color}.jpg"
     bucket_name = "shomron-tights-images"
     data = downscale_image(local_path)
-    upload_bytes_to_cloud_storage(bucket_name, data, blob_name)
+    upload_bytes_to_cloud_storage(bucket_name, data, blob_name, overwrite=True)

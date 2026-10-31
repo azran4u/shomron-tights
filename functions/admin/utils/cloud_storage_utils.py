@@ -70,10 +70,10 @@ def upload_folder_content_to_cloud_storage(bucket_name, folder_path):
             print(f"File {file_path} uploaded to {blob_name}.")
 
 
-def upload_bytes_to_cloud_storage(bucket_name, data, blob_name):
+def upload_bytes_to_cloud_storage(bucket_name, data, blob_name, overwrite=False):
     bucket = cloud_storage_client.bucket(bucket_name)
     blob = bucket.blob(blob_name)
-    if blob.exists():
+    if not overwrite and blob.exists():
         raise FileExistsError(f"{blob_name} already exists; not overwriting")
 
     blob.cache_control = "public, max-age=3600"
