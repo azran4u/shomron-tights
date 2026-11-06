@@ -47,7 +47,7 @@ const CheckoutPage: React.FC = () => {
   const { sendEmail } = useSendEmail();
   const { url } = useOrderUrl();
   const generateCartTable = useProductsTable(cartProducts);
-  const { isExistingOrder } = useIsExistingOrder();
+  const { isExistingOrder, isLoading: existingOrderLoading } = useIsExistingOrder();
   
   const {
     values,
@@ -70,6 +70,15 @@ const CheckoutPage: React.FC = () => {
     onSubmit: async (values: CheckoutFormValues, { setStatus }) => {
       if (cartProducts.length === 0) {
         setStatus("העגלה ריקה. אנא הוסף/י מוצרים לעגלה לפני ביצוע ההזמנה.");
+        return;
+      }
+      const hasInactiveProduct = cartProducts.some(
+        (item) => item.product.is_active !== "כן"
+      );
+      if (hasInactiveProduct && !isExistingOrder) {
+        if (!existingOrderLoading) {
+          setStatus("העגלה ריקה. אנא הוסף/י מוצרים לעגלה לפני ביצוע ההזמנה.");
+        }
         return;
       }
       if (!sale) {
